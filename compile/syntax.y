@@ -4,6 +4,12 @@
     #include <stdlib.h>
     #include <string.h>
     #include "Struct.c"
+    // #define YYSTYPE union {
+    //         char* string;
+    //         int int_val;
+    //         double real_val;
+    //         char char_val;
+    // }
     extern FILE *yyin;
 	extern FILE *yyout;
     extern int yylineno;
@@ -15,7 +21,7 @@
 %}
 
 %union {
-    char* string;
+    char string[255];
     int int_val;
     double real_val;
     char char_val;
@@ -26,7 +32,8 @@
 %token  LOOPF LOOPW
 %token  READ WRITE
 %token  IF ELSE
-%token  DOT COMMA SEMICOLON
+%token  DOT COMMA
+%token  <char_val> SEMICOLON
 %token  OPENPARENTHESIS CLOSEPARENTHESIS OPENHOOK CLOSEHOOK OPENBRACKET CLOSEBRACKET
 %token  EQUAL NONEQUAL AND OR NON INFERIOR SUPERIOR INFERIOREQUAL SUPERIOREQUAL
 %token  ADD SUB MULT DIV MOD
@@ -71,16 +78,17 @@ code:  affectation code |commentaire code |tabledeclaration code | structdeclara
 declarations: declaration declarations | declaration ;
 
 
-declaration:    INTEGERDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }|
-                REALDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }| 
-                STRINGDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }|
-                CHARDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }| 
-                BOOLEENDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }; //| 
-                // (INTEGERDECLARE | REALDECLARE | STRINGDECLARE | CHARDECLARE | BOOLEENDECLARE) ID ASSIGNMENT expression SEMICOLON | tabledeclaration;
+// declaration:    INTEGERDECLARE ID SEMICOLON {  ;printf("%s : %s\n",$1,$2); }|
+//                 REALDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }| 
+//                 STRINGDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }|
+//                 CHARDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }| 
+//                 BOOLEENDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }| 
+//                 INTEGERDECLARE ID ASSIGNMENT expression SEMICOLON |
+//                 REALDECLARE | STRINGDECLARE | CHARDECLARE | BOOLEENDECLARE | tabledeclaration;
 
 
-
-type: INTEGERDECLARE | REALDECLARE | CHARDECLARE | STRINGDECLARE | BOOLEENDECLARE | structure ;
+declaration: type ID SEMICOLON { insertColumn(Table_sym,$<string>1,$2,"",1); };
+type: INTEGERDECLARE  | REALDECLARE  | CHARDECLARE  | STRINGDECLARE  | BOOLEENDECLARE | structure ;
 structdeclaration: STRUCTDECLARE structure OPENHOOK declarations CLOSEHOOK ;
 structure: ID ;
 tabledeclaration: type OPENBRACKET tablesize CLOSEBRACKET ID SEMICOLON;
@@ -115,6 +123,14 @@ int main(int argc, char **argv) {
     yyout = fopen("Output.txt", "r+");
 
     int value = yyparse();
+
+    Column *col = Table_sym->Columns;
+    while(col!=NULL){
+        printf("%s  :   %s\n",col->nameToken,col->typeToken);
+        col=col->suivC;
+    }
+
+
     if(value==1){
         printf("\nErreur dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
     }else{

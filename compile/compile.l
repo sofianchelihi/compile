@@ -157,6 +157,7 @@ INLINECOMMENT #{ANYTHING}
 {SEMICOLON} {
     yysuccess("pointVirgule", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.char_val=';';
     return(SEMICOLON);
 }
 
@@ -296,7 +297,7 @@ INLINECOMMENT #{ANYTHING}
 {CHAR} {
     yysuccess("charactere", yytext, yyleng);
     currentColumn +=yyleng;
-    yylval.char_val=yytext;
+    yylval.char_val=yytext[0];
     return(CHAR);
 }
 
@@ -323,14 +324,14 @@ INLINECOMMENT #{ANYTHING}
 {INTEGERDECLARE} {
     yysuccess("INTEGERdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
-    yylval.string = "int";
+    strcpy( yylval.string ,"int");
     return(INTEGERDECLARE);
 }
 
 {STRINGDECLARE} {
     yysuccess("STRINGdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
-    yylval.string = "string";
+    strcpy( yylval.string , "string");
     return(STRINGDECLARE);
 }
 
@@ -338,20 +339,20 @@ INLINECOMMENT #{ANYTHING}
 {BOOLEENDECLARE} {
     yysuccess("BOOLEANdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
-    yylval.string = "bool";
+    strcpy(yylval.string , "bool");
     return(BOOLEENDECLARE);
 }
 
 {REALDECLARE} {
     yysuccess("REALdeclaration",yytext, yyleng);
     currentColumn +=yyleng;
-    yylval.string = "float";
+    strcpy(  yylval.string ,"float");
     return(REALDECLARE);
 }
 {CHARDECLARE} {
     yysuccess("CHARdeclaration",yytext, yyleng);
     currentColumn +=yyleng;
-    yylval.string = "char";
+    strcpy( yylval.string , "char");
     return(CHARDECLARE);
 }
 
@@ -376,7 +377,7 @@ INLINECOMMENT #{ANYTHING}
 {ID} {
     yysuccess("id", yytext, yyleng);
     currentColumn +=yyleng;
-    yylval.string=yytext;
+    strcpy( yylval.string,yytext);
     i=100;
     return(ID);
 }

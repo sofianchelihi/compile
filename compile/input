@@ -2,4 +2,8 @@ pro : Nom_du_programme {
     int x ;
     int y ;
     int x ;
+   float a;
+   char c;
+   string s;
+   bool b; 
 } 
