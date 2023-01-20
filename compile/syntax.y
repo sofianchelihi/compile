@@ -27,7 +27,8 @@
         char res[10];
     }quad;
     int sauv_if_fin = 0;
-
+    int sauv_else =0;
+    int sauv_else_fin=0;
     quad tab_quad[1000];
     int taille;
 %}
@@ -101,10 +102,27 @@ structure: ID ;
 tabledeclaration: type OPENBRACKET tablesize CLOSEBRACKET ID SEMICOLON;
 tablesize: ID | expressionAR | INTEGER;
 statements : if_stm | if_else_stm | for_stm | while_stm ;
-if_stm: IF OPENPARENTHESIS  expressionLG CLOSEPARENTHESIS OPENHOOK code CLOSEHOOK{
-        sprintf( tab_quad[sauv_if_fin].opr1,"%d",taille+1);
-    };
-if_else_stm: IF OPENPARENTHESIS expressionLG CLOSEPARENTHESIS OPENHOOK code CLOSEHOOK ELSE OPENHOOK code CLOSEHOOK;
+if_stm: B1  OPENHOOK code CLOSEHOOK{
+
+};
+B1:IF  expressionLG{
+    
+};
+if_else_stm: A1 ELSE OPENHOOK code CLOSEHOOK {
+    sprintf(tab_quad[sauv_else_fin].opr1,"%d",taille+1);
+};
+A1: A2 OPENHOOK code CLOSEHOOK {
+    sprintf(tab_quad[sauv_else].opr1,"%d",taille+2); 
+    strcpy( tab_quad[taille].op,"BR");
+    strcpy( tab_quad[taille].opr1,"");
+    strcpy( tab_quad[taille].opr2,"");
+    strcpy( tab_quad[taille].res,"");
+    sauv_else_fin = taille;
+    taille++;
+};
+A2: IF OPENPARENTHESIS expressionLG CLOSEPARENTHESIS {
+    sauv_else=taille-1;
+};
 for_stm: LOOPF ID ASSIGNMENT expressionAR COMMA expressionLG COMMA expressionAR OPENHOOK code CLOSEHOOK;
 while_stm: LOOPW OPENPARENTHESIS expressionLG CLOSEPARENTHESIS OPENHOOK code CLOSEHOOK;
 expression : expressionAR | expressionLG;
@@ -181,42 +199,36 @@ element : ID | BOOLEAN | tableelement | champenreg | expressionAR EQUAL expressi
     strcpy( tab_quad[taille].opr1,"");
     strcpy( tab_quad[taille].opr2,$<string>1);
     strcpy( tab_quad[taille].res,$<string>3);
-    sauv_if_fin = taille;
     taille++;
 } | expressionAR NONEQUAL expressionAR {
     strcpy( tab_quad[taille].op,"BE");
     strcpy( tab_quad[taille].opr1,"");
     strcpy( tab_quad[taille].opr2,$<string>1);
     strcpy( tab_quad[taille].res,$<string>3);
-    sauv_if_fin = taille;
     taille++;
 }| expressionAR INFERIOR expressionAR{
      strcpy( tab_quad[taille].op,"BGE");
     strcpy( tab_quad[taille].opr1,"");
     strcpy( tab_quad[taille].opr2,$<string>1);
     strcpy( tab_quad[taille].res,$<string>3);
-    sauv_if_fin = taille;
     taille++;
 } | expressionAR INFERIOREQUAL expressionAR {
     strcpy( tab_quad[taille].op,"BG");
     strcpy( tab_quad[taille].opr1,"");
     strcpy( tab_quad[taille].opr2,$<string>1);
     strcpy( tab_quad[taille].res,$<string>3);
-    sauv_if_fin = taille;
     taille++;
 } | expressionAR SUPERIOR expressionAR{
      strcpy( tab_quad[taille].op,"BLE");
     strcpy( tab_quad[taille].opr1,"");
     strcpy( tab_quad[taille].opr2,$<string>1);
     strcpy( tab_quad[taille].res,$<string>3);
-    sauv_if_fin = taille;
     taille++;
 } | expressionAR SUPERIOREQUAL expressionAR {
      strcpy( tab_quad[taille].op,"BL");
     strcpy( tab_quad[taille].opr1,"");
     strcpy( tab_quad[taille].opr2,$<string>1);
     strcpy( tab_quad[taille].res,$<string>3);
-    sauv_if_fin = taille;
     taille++;
 };
 affectation : ID ASSIGNMENT expressionAR SEMICOLON{ 
@@ -268,7 +280,7 @@ int main(int argc, char **argv) {
     if(value==1){
         printf("\nErreur dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
     }else{
-        printf("Complation success");
+        printf("Complation success\n");
     }
     fclose(yyin);
     fclose(yyout);
