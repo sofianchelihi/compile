@@ -68,16 +68,16 @@
 
 
 %left OPENPARENTHESIS CLOSEPARENTHESIS OPENBRACKET CLOSEBRACKET DOT ;
-%left NON
-%left MULT DIV MOD
-%left ADD SUB
-%left INFERIOR INFERIOREQUAL SUPERIOR SUPERIOREQUAL
-%left EQUAL NONEQUAL
-%left AND
-%left OR
-%right ASSIGNMENT 
-%left COMMA
-%start Input
+%left NON;
+%left MULT DIV MOD;
+%left ADD SUB;
+%left INFERIOR INFERIOREQUAL SUPERIOR SUPERIOREQUAL;
+%left EQUAL NONEQUAL;
+%left AND;
+%left OR;
+%right ASSIGNMENT ;
+%left COMMA;
+%start Input;
 
 
 
@@ -111,7 +111,6 @@ commentaire: INLINECOMMENT STRING;
 expressionAR :OPENPARENTHESIS expressionAR CLOSEPARENTHESIS { strcpy( $<string>$,$<string>2); } | expressionAR ADD expressionAR {
     char res[10];
     strcpy( tab_quad[taille].op,"+");
-    // sprintf(tab_quad[taille].opr1,"%d",$1);
     strcpy( tab_quad[taille].opr1,$<string>1);
     strcpy( tab_quad[taille].opr2,$<string>3);
     sprintf(res, "R%d", ri);
@@ -119,7 +118,57 @@ expressionAR :OPENPARENTHESIS expressionAR CLOSEPARENTHESIS { strcpy( $<string>$
     taille++;
     ri++;
     strcpy( $<string>$,res);
-} | expressionAR SUB expressionAR | SUB expressionAR | expressionAR MULT expressionAR | expressionAR DIV expressionAR | expressionAR MOD expressionAR | item;
+} | expressionAR SUB expressionAR {
+        char res[10];
+    strcpy( tab_quad[taille].op,"-");
+    strcpy( tab_quad[taille].opr1,$<string>1);
+    strcpy( tab_quad[taille].opr2,$<string>3);
+    sprintf(res, "R%d", ri);
+    strcpy( tab_quad[taille].res,res);
+    taille++;
+    ri++;
+    strcpy( $<string>$,res);
+}| SUB expressionAR {
+    char res[10];
+    strcpy( tab_quad[taille].op,"-");
+    strcpy( tab_quad[taille].opr1,"0");
+    strcpy( tab_quad[taille].opr2,$<string>2);
+    sprintf(res, "R%d", ri);
+    strcpy( tab_quad[taille].res,res);
+    taille++;
+    ri++;
+    strcpy( $<string>$,res);
+}| expressionAR MULT expressionAR {
+    char res[10];
+    strcpy( tab_quad[taille].op,"*");
+    strcpy( tab_quad[taille].opr1,$<string>1);
+    strcpy( tab_quad[taille].opr2,$<string>3);
+    sprintf(res, "R%d", ri);
+    strcpy( tab_quad[taille].res,res);
+    taille++;
+    ri++;
+    strcpy( $<string>$,res);
+}| expressionAR DIV expressionAR {
+    char res[10];
+    strcpy( tab_quad[taille].op,"/");
+    strcpy( tab_quad[taille].opr1,$<string>1);
+    strcpy( tab_quad[taille].opr2,$<string>3);
+    sprintf(res, "R%d", ri);
+    strcpy( tab_quad[taille].res,res);
+    taille++;
+    ri++;
+    strcpy( $<string>$,res);
+}| expressionAR MOD expressionAR {
+    char res[10];
+    strcpy( tab_quad[taille].op,"\%");
+    strcpy( tab_quad[taille].opr1,$<string>1);
+    strcpy( tab_quad[taille].opr2,$<string>3);
+    sprintf(res, "R%d", ri);
+    strcpy( tab_quad[taille].res,res);
+    taille++;
+    ri++;
+    strcpy( $<string>$,res);
+}| item;
 item: ID { strcpy($<string>$, $<string>1); }  | INTEGER { sprintf($<string>$,"%d",$<int_val>1); } ;
 tableelement : ID OPENBRACKET tablesize CLOSEBRACKET;
 champenreg: ID DOT ID ;
@@ -127,12 +176,28 @@ expressionLG: OPENPARENTHESIS expressionLG CLOSEPARENTHESIS | expressionLG AND e
 element : ID | BOOLEAN | tableelement | champenreg | expressionAR EQUAL expressionAR | expressionAR NONEQUAL expressionAR | expressionAR INFERIOR expressionAR | expressionAR INFERIOREQUAL expressionAR | expressionAR SUPERIOR expressionAR | expressionAR SUPERIOREQUAL expressionAR | expressionLG EQUAL expressionLG | expressionLG NONEQUAL expressionLG;
 // affectation : ID ASSIGNMENT expression | type ID ASSIGNMENT expression;
 affectation : ID ASSIGNMENT expressionAR SEMICOLON{ 
-    strcpy( tab_quad[taille].op,":=");
-   // sprintf(tab_quad[taille].opr1,"%d",$<string>3);
-    strcpy(tab_quad[taille].opr1,$<string>3);
-    strcpy( tab_quad[taille].opr2,"");
-    strcpy( tab_quad[taille].res,$1);
-    taille++;
+    if(get_id(Table_sym,$1)!=NULL){
+        strcpy( tab_quad[taille].op,":=");
+        strcpy(tab_quad[taille].opr1,$<string>3);
+        strcpy( tab_quad[taille].opr2,"");
+        strcpy( tab_quad[taille].res,$1);
+        taille++;
+    }else{
+        printf("Variable non declaré :%s\n",$1);
+        YYERROR;
+    }
+}| type ID ASSIGNMENT expressionAR SEMICOLON{
+    if(get_id(Table_sym,$2)==NULL){
+        insertColumn(Table_sym,$<string>1,$2,"",1); 
+        strcpy( tab_quad[taille].op,":=");
+        strcpy(tab_quad[taille].opr1,$<string>4);
+        strcpy( tab_quad[taille].opr2,"");
+        strcpy( tab_quad[taille].res,$2);
+        taille++;
+    }else{
+        printf("Variable deja declaré :%s\n",$2);
+        YYERROR;
+    }
 };
 %%
 
