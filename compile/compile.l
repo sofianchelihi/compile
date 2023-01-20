@@ -296,12 +296,14 @@ INLINECOMMENT #{ANYTHING}
 {CHAR} {
     yysuccess("charactere", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.char_val=yytext;
     return(CHAR);
 }
 
 {INTEGER} {
     yysuccess("INTEGER", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.int_val=atoi(yytext);
     return(INTEGER);
 }
 
@@ -311,6 +313,7 @@ INLINECOMMENT #{ANYTHING}
 {REALNUMBER} {
     yysuccess("REAL", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.real_val=atof(yytext);
     return(REALNUMBER);
 }
 
@@ -320,12 +323,14 @@ INLINECOMMENT #{ANYTHING}
 {INTEGERDECLARE} {
     yysuccess("INTEGERdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "int";
     return(INTEGERDECLARE);
 }
 
 {STRINGDECLARE} {
     yysuccess("STRINGdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "string";
     return(STRINGDECLARE);
 }
 
@@ -333,17 +338,20 @@ INLINECOMMENT #{ANYTHING}
 {BOOLEENDECLARE} {
     yysuccess("BOOLEANdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "bool";
     return(BOOLEENDECLARE);
 }
 
 {REALDECLARE} {
     yysuccess("REALdeclaration",yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "float";
     return(REALDECLARE);
 }
 {CHARDECLARE} {
     yysuccess("CHARdeclaration",yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "char";
     return(CHARDECLARE);
 }
 
@@ -368,9 +376,7 @@ INLINECOMMENT #{ANYTHING}
 {ID} {
     yysuccess("id", yytext, yyleng);
     currentColumn +=yyleng;
-    FILE *f=fopen("tab_symb.txt","r+");
-    fprintf(f,"%s\n",yytext);
-    fclose(f);
+    yylval.string=yytext;
     i=100;
     return(ID);
 }

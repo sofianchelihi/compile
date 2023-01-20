@@ -86,3 +86,18 @@ Ligne* allocateLigne(){
             c->suivC=col;
         }
     }
+
+
+    Column* get_id(Ligne *Lign , char id[]){
+        Column *col = Lign->Columns;
+        int stop = 0;
+        while (stop==0 && col!=NULL){
+            if( strcmp(col->nameToken,id)==0){
+                stop = 1;
+            }
+            else{
+                col=col->suivC;
+            }
+        }
+        return col;      
+    }

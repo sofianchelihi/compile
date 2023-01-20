@@ -1,1 +1,5 @@
-pro : Nom_du_programme{ int 1 ; 
+pro : Nom_du_programme { 
+    int x ;
+    int y ;
+    int x ;
+} 

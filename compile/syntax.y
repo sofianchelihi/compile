@@ -14,6 +14,13 @@
     int i =25;
 %}
 
+%union {
+    char* string;
+    int int_val;
+    double real_val;
+    char char_val;
+}
+
 
 %token  PRO
 %token  LOOPF LOOPW
@@ -24,12 +31,20 @@
 %token  EQUAL NONEQUAL AND OR NON INFERIOR SUPERIOR INFERIOREQUAL SUPERIOREQUAL
 %token  ADD SUB MULT DIV MOD
 %token  ASSIGNMENT
-%token  BOOLEAN CHAR INTEGER REALNUMBER
-%token  INTEGERDECLARE STRINGDECLARE BOOLEENDECLARE REALDECLARE CHARDECLARE STRUCTDECLARE
+%token  <string> BOOLEAN
+%token  <char_val> CHAR
+%token  <int_val> INTEGER
+%token  <real_val> REALNUMBER
+%token  <string> INTEGERDECLARE 
+%token  <string> STRINGDECLARE 
+%token  <string> BOOLEENDECLARE 
+%token  <string> REALDECLARE 
+%token  <string> CHARDECLARE 
+%token  <string> STRUCTDECLARE
 %token  INLINECOMMENT
 %token  LINEBREAK
-%token  STRING
-%token  ID
+%token  <string> STRING
+%token  <string> ID
 
 
 
@@ -54,7 +69,17 @@
 Input: PRO ID OPENHOOK code CLOSEHOOK ;
 code:  affectation code |commentaire code |tabledeclaration code | structdeclaration code | declarations code | statements code | expression code | read code| write code | tabledeclaration | structdeclaration | declarations | statements | expression | read | write | commentaire | affectation;
 declarations: declaration declarations | declaration ;
-declaration: type ID SEMICOLON | type ID ASSIGNMENT expression SEMICOLON | tabledeclaration;
+
+
+declaration:    INTEGERDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }|
+                REALDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }| 
+                STRINGDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }|
+                CHARDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }| 
+                BOOLEENDECLARE ID SEMICOLON { printf("%s : %s\n",$1,$2); }; //| 
+                // (INTEGERDECLARE | REALDECLARE | STRINGDECLARE | CHARDECLARE | BOOLEENDECLARE) ID ASSIGNMENT expression SEMICOLON | tabledeclaration;
+
+
+
 type: INTEGERDECLARE | REALDECLARE | CHARDECLARE | STRINGDECLARE | BOOLEENDECLARE | structure ;
 structdeclaration: STRUCTDECLARE structure OPENHOOK declarations CLOSEHOOK ;
 structure: ID ;
@@ -84,16 +109,19 @@ affectation : ID ASSIGNMENT expression | type ID ASSIGNMENT expression;
 int main(int argc, char **argv) {
     Table_sym = insertLigne(&Table_sym ,1);
 
-    insertColumn(Table_sym,"STRING","user","islam",1);
+ //  insertColumn(Table_sym,"STRING","user","islam",1);
 
     yyin = fopen(argv[1], "r");
+    yyout = fopen("Output.txt", "r+");
+
     int value = yyparse();
-    printf("\n%d\n",value);
     if(value==1){
         printf("\nErreur dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
+    }else{
+        printf("Complation success");
     }
-    printf("%s %s %s",Table_sym->Columns->typeToken,Table_sym->Columns->nameToken,Table_sym->Columns->valeurToken);
     fclose(yyin);
+    fclose(yyout);
     return 0;
 }
 

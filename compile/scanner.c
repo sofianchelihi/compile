@@ -1163,75 +1163,83 @@ YY_RULE_SETUP
 {
     yysuccess("charactere", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.char_val=yytext;
     return(CHAR);
 }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 302 "compile.l"
+#line 303 "compile.l"
 {
     yysuccess("INTEGER", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.int_val=atoi(yytext);
     return(INTEGER);
 }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 311 "compile.l"
+#line 313 "compile.l"
 {
     yysuccess("REAL", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.real_val=atof(yytext);
     return(REALNUMBER);
 }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 320 "compile.l"
+#line 323 "compile.l"
 {
     yysuccess("INTEGERdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "int";
     return(INTEGERDECLARE);
 }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 326 "compile.l"
+#line 330 "compile.l"
 {
     yysuccess("STRINGdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "string";
     return(STRINGDECLARE);
 }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 333 "compile.l"
+#line 338 "compile.l"
 {
     yysuccess("BOOLEANdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "bool";
     return(BOOLEENDECLARE);
 }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 339 "compile.l"
+#line 345 "compile.l"
 {
     yysuccess("REALdeclaration",yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "float";
     return(REALDECLARE);
 }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 344 "compile.l"
+#line 351 "compile.l"
 {
     yysuccess("CHARdeclaration",yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.string = "char";
     return(CHARDECLARE);
 }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 350 "compile.l"
+#line 358 "compile.l"
 {
     yysuccess("STRUCTdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1240,7 +1248,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 357 "compile.l"
+#line 365 "compile.l"
 {
     yysuccess("comment", "", yyleng);
     currentColumn +=yyleng;
@@ -1250,27 +1258,25 @@ YY_RULE_SETUP
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 363 "compile.l"
+#line 371 "compile.l"
 {
     currentColumn = 1;
 }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 368 "compile.l"
+#line 376 "compile.l"
 {
     yysuccess("id", yytext, yyleng);
     currentColumn +=yyleng;
-    FILE *f=fopen("tab_symb.txt","r+");
-    fprintf(f,"%s\n",yytext);
-    fclose(f);
+    yylval.string=yytext;
     i=100;
     return(ID);
 }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 378 "compile.l"
+#line 384 "compile.l"
 {
     yysuccess("STRING", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1279,7 +1285,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 385 "compile.l"
+#line 391 "compile.l"
 {
     yysuccess("SPACE", yytext, yyleng);
     currentColumn+=yyleng;
@@ -1287,12 +1293,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(c_comment):
-#line 390 "compile.l"
+#line 396 "compile.l"
 yyterminate();
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 392 "compile.l"
+#line 398 "compile.l"
 {
     yyerror("Unrecognized character");
     showLexicalError();
@@ -1301,10 +1307,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 399 "compile.l"
+#line 405 "compile.l"
 ECHO;
 	YY_BREAK
-#line 1308 "scanner.c"
+#line 1314 "scanner.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2319,7 +2325,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 399 "compile.l"
+#line 405 "compile.l"
 
 
 
