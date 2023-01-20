@@ -559,15 +559,16 @@ char *yytext;
     #include <string.h>
     #include "syntax.tab.h"
 
-    int currentColumn = 1;
+    extern int currentColumn;
     int showsuccess = 1;
+    extern int i;
 
 
 
     void yysuccess(const char *s, const char *lexeme, int length);
     void yyerror(const char *s);
     void showLexicalError();
-#line 571 "scanner.c"
+#line 572 "scanner.c"
 /*Used to get the current line INTEGER*/
 /*Used for multiline comments*/
      
@@ -579,7 +580,7 @@ char *yytext;
 /*Constant strings and numbers*/
 /*Declarations*/
 /*Comments*/
-#line 583 "scanner.c"
+#line 584 "scanner.c"
 
 #define INITIAL 0
 #define c_comment 1
@@ -797,10 +798,10 @@ YY_DECL
 		}
 
 	{
-#line 98 "compile.l"
+#line 99 "compile.l"
 
 
-#line 804 "scanner.c"
+#line 805 "scanner.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -869,7 +870,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 100 "compile.l"
+#line 101 "compile.l"
 {
     yysuccess("pro", yytext, yyleng);
     currentColumn +=yyleng;
@@ -878,7 +879,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 106 "compile.l"
+#line 107 "compile.l"
 {
     yysuccess("for", yytext, yyleng);
     currentColumn +=yyleng;
@@ -887,7 +888,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 111 "compile.l"
+#line 112 "compile.l"
 {
     yysuccess("while", yytext, yyleng);
     currentColumn +=yyleng;
@@ -896,7 +897,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 117 "compile.l"
+#line 118 "compile.l"
 {
     yysuccess("read", yytext, yyleng);
     currentColumn +=yyleng;
@@ -905,7 +906,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 123 "compile.l"
+#line 124 "compile.l"
 {
     yysuccess("write", yytext, yyleng);
     currentColumn +=yyleng;
@@ -914,7 +915,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 129 "compile.l"
+#line 130 "compile.l"
 {
     yysuccess("if", yytext, yyleng);
     currentColumn +=yyleng;
@@ -923,7 +924,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 135 "compile.l"
+#line 136 "compile.l"
 {
     yysuccess("else", yytext, yyleng);
     currentColumn +=yyleng;
@@ -932,7 +933,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 143 "compile.l"
+#line 144 "compile.l"
 {
     yysuccess("point", yytext, yyleng);
     currentColumn +=yyleng;
@@ -941,7 +942,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 149 "compile.l"
+#line 150 "compile.l"
 {
     yysuccess("virgule", yytext, yyleng);
     currentColumn +=yyleng;
@@ -950,7 +951,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 155 "compile.l"
+#line 156 "compile.l"
 {
     yysuccess("pointVirgule", yytext, yyleng);
     currentColumn +=yyleng;
@@ -959,7 +960,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 161 "compile.l"
+#line 162 "compile.l"
 {
     yysuccess("parenthesO", yytext, yyleng);
     currentColumn +=yyleng;
@@ -968,7 +969,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 167 "compile.l"
+#line 168 "compile.l"
 {
     yysuccess("parenthesF", yytext, yyleng);
     currentColumn +=yyleng;
@@ -977,7 +978,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 173 "compile.l"
+#line 174 "compile.l"
 {
     yysuccess("accoladeO", yytext, yyleng);
     currentColumn +=yyleng;
@@ -986,7 +987,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 179 "compile.l"
+#line 180 "compile.l"
 {
     yysuccess("accoladeF", yytext, yyleng);
     currentColumn +=yyleng;
@@ -995,7 +996,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 185 "compile.l"
+#line 186 "compile.l"
 {
     yysuccess("bracketO", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1004,7 +1005,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 191 "compile.l"
+#line 192 "compile.l"
 {
     yysuccess("bracketF", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1013,7 +1014,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 197 "compile.l"
+#line 198 "compile.l"
 {
     yysuccess("egale", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1022,7 +1023,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 203 "compile.l"
+#line 204 "compile.l"
 {
     yysuccess("nonEgale", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1031,7 +1032,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 209 "compile.l"
+#line 210 "compile.l"
 {
     yysuccess("AND", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1040,7 +1041,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 215 "compile.l"
+#line 216 "compile.l"
 {
     yysuccess("OR", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1049,7 +1050,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 221 "compile.l"
+#line 222 "compile.l"
 {
     yysuccess("NON", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1058,7 +1059,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 227 "compile.l"
+#line 228 "compile.l"
 {
     yysuccess("INFERIOR", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1067,7 +1068,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 233 "compile.l"
+#line 234 "compile.l"
 {
     yysuccess("SUPERIOR", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1076,7 +1077,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 239 "compile.l"
+#line 240 "compile.l"
 {
     yysuccess("INFERIOREQUAL", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1085,7 +1086,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 245 "compile.l"
+#line 246 "compile.l"
 {
     yysuccess("SUPERIOREQUAL", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1094,7 +1095,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 251 "compile.l"
+#line 252 "compile.l"
 {
     yysuccess("ADDITION", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1103,7 +1104,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 257 "compile.l"
+#line 258 "compile.l"
 {
     yysuccess("SUBTRACTION", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1112,7 +1113,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 263 "compile.l"
+#line 264 "compile.l"
 {
     yysuccess("MULTIPLICATION", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1121,7 +1122,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 269 "compile.l"
+#line 270 "compile.l"
 {
     yysuccess("DIVISION", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1130,7 +1131,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 275 "compile.l"
+#line 276 "compile.l"
 {
     yysuccess("MODULO", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1139,7 +1140,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 282 "compile.l"
+#line 283 "compile.l"
 {
     yysuccess("ASSIGNMENT", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1148,7 +1149,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 288 "compile.l"
+#line 289 "compile.l"
 {
     yysuccess("boolean", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1157,7 +1158,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 294 "compile.l"
+#line 295 "compile.l"
 {
     yysuccess("charactere", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1166,7 +1167,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 300 "compile.l"
+#line 301 "compile.l"
 {
     yysuccess("INTEGER", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1175,7 +1176,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 309 "compile.l"
+#line 310 "compile.l"
 {
     yysuccess("REAL", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1184,7 +1185,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 318 "compile.l"
+#line 319 "compile.l"
 {
     yysuccess("INTEGERdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1193,7 +1194,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 324 "compile.l"
+#line 325 "compile.l"
 {
     yysuccess("STRINGdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1202,7 +1203,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 331 "compile.l"
+#line 332 "compile.l"
 {
     yysuccess("BOOLEANdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1211,7 +1212,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 337 "compile.l"
+#line 338 "compile.l"
 {
     yysuccess("REALdeclaration",yytext, yyleng);
     currentColumn +=yyleng;
@@ -1220,7 +1221,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 342 "compile.l"
+#line 343 "compile.l"
 {
     yysuccess("CHARdeclaration",yytext, yyleng);
     currentColumn +=yyleng;
@@ -1229,7 +1230,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 348 "compile.l"
+#line 349 "compile.l"
 {
     yysuccess("STRUCTdeclaration", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1238,7 +1239,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 355 "compile.l"
+#line 356 "compile.l"
 {
     yysuccess("comment", "", yyleng);
     currentColumn +=yyleng;
@@ -1248,26 +1249,27 @@ YY_RULE_SETUP
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 361 "compile.l"
+#line 362 "compile.l"
 {
     currentColumn = 1;
 }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 366 "compile.l"
+#line 367 "compile.l"
 {
     yysuccess("id", yytext, yyleng);
     currentColumn +=yyleng;
     FILE *f=fopen("tab_symb.txt","r+");
     fprintf(f,"%s\n",yytext);
     fclose(f);
+    i=100;
     return(ID);
 }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 376 "compile.l"
+#line 377 "compile.l"
 {
     yysuccess("STRING", yytext, yyleng);
     currentColumn +=yyleng;
@@ -1276,7 +1278,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 383 "compile.l"
+#line 384 "compile.l"
 {
     yysuccess("SPACE", yytext, yyleng);
     currentColumn+=yyleng;
@@ -1284,12 +1286,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(c_comment):
-#line 388 "compile.l"
+#line 389 "compile.l"
 yyterminate();
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 390 "compile.l"
+#line 391 "compile.l"
 {
     yyerror("Unrecognized character");
     showLexicalError();
@@ -1298,10 +1300,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 397 "compile.l"
+#line 398 "compile.l"
 ECHO;
 	YY_BREAK
-#line 1305 "scanner.c"
+#line 1307 "scanner.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2316,7 +2318,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 397 "compile.l"
+#line 398 "compile.l"
 
 
 

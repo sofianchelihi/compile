@@ -8,6 +8,8 @@
     extern int yylineno;
     extern char *yytext;
     extern int yylex();
+    int currentColumn = 1;
+    int i =25;
 %}
 
 
@@ -80,7 +82,10 @@ affectation : ID ASSIGNMENT expression | type ID ASSIGNMENT expression;
 int main(int argc, char **argv) {
     yyin = fopen(argv[1], "r");
     int value = yyparse();
-    printf("%d",value);
+    printf("\n%d\n",value);
+    if(value==1){
+        printf("\nErreur dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
+    }
     fclose(yyin);
     return 0;
 }

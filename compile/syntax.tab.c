@@ -77,8 +77,10 @@
     extern int yylineno;
     extern char *yytext;
     extern int yylex();
+    int currentColumn = 1;
+    int i =25;
 
-#line 82 "syntax.tab.c"
+#line 84 "syntax.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -553,15 +555,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    50,    50,    51,    51,    51,    51,    51,    51,    51,
-      51,    51,    51,    51,    51,    51,    51,    51,    51,    51,
-      51,    52,    52,    53,    53,    53,    54,    54,    54,    54,
-      54,    54,    55,    56,    57,    58,    58,    58,    59,    59,
-      59,    59,    60,    61,    62,    63,    64,    64,    65,    66,
-      67,    68,    68,    68,    68,    68,    68,    68,    68,    69,
-      69,    69,    69,    70,    71,    72,    72,    72,    72,    72,
-      73,    73,    73,    73,    73,    73,    73,    73,    73,    73,
-      73,    73,    74,    74
+       0,    52,    52,    53,    53,    53,    53,    53,    53,    53,
+      53,    53,    53,    53,    53,    53,    53,    53,    53,    53,
+      53,    54,    54,    55,    55,    55,    56,    56,    56,    56,
+      56,    56,    57,    58,    59,    60,    60,    60,    61,    61,
+      61,    61,    62,    63,    64,    65,    66,    66,    67,    68,
+      69,    70,    70,    70,    70,    70,    70,    70,    70,    71,
+      71,    71,    71,    72,    73,    74,    74,    74,    74,    74,
+      75,    75,    75,    75,    75,    75,    75,    75,    75,    75,
+      75,    75,    76,    76
 };
 #endif
 
@@ -1483,7 +1485,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1487 "syntax.tab.c"
+#line 1489 "syntax.tab.c"
 
       default: break;
     }
@@ -1715,7 +1717,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 75 "syntax.y"
+#line 77 "syntax.y"
 
 
 
@@ -1724,7 +1726,10 @@ yyreturn:
 int main(int argc, char **argv) {
     yyin = fopen(argv[1], "r");
     int value = yyparse();
-    printf("%d",value);
+    printf("\n%d\n",value);
+    if(value==1){
+        printf("\nErreur dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
+    }
     fclose(yyin);
     return 0;
 }

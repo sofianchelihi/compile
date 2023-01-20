@@ -5,8 +5,9 @@
     #include <string.h>
     #include "syntax.tab.h"
 
-    int currentColumn = 1;
+    extern int currentColumn;
     int showsuccess = 1;
+    extern int i;
 
 
 
@@ -369,9 +370,9 @@ INLINECOMMENT #{ANYTHING}
     FILE *f=fopen("tab_symb.txt","r+");
     fprintf(f,"%s\n",yytext);
     fclose(f);
+    i=100;
     return(ID);
 }
-
 
 {STRING} {
     yysuccess("STRING", yytext, yyleng);
