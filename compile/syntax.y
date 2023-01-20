@@ -29,6 +29,7 @@
     int sauv_if_fin = 0;
     int sauv_else =0;
     int sauv_else_fin=0;
+    int sauv_fin_while=0;
     quad tab_quad[1000];
     int taille;
 %}
@@ -103,10 +104,10 @@ tabledeclaration: type OPENBRACKET tablesize CLOSEBRACKET ID SEMICOLON;
 tablesize: ID | expressionAR | INTEGER;
 statements : if_stm | if_else_stm | for_stm | while_stm ;
 if_stm: B1  OPENHOOK code CLOSEHOOK{
-
+    sprintf(tab_quad[sauv_if_fin].opr1,"%d",taille+1);
 };
 B1:IF  expressionLG{
-    
+    sauv_if_fin = taille-1;
 };
 if_else_stm: A1 ELSE OPENHOOK code CLOSEHOOK {
     sprintf(tab_quad[sauv_else_fin].opr1,"%d",taille+1);
@@ -124,7 +125,23 @@ A2: IF OPENPARENTHESIS expressionLG CLOSEPARENTHESIS {
     sauv_else=taille-1;
 };
 for_stm: LOOPF ID ASSIGNMENT expressionAR COMMA expressionLG COMMA expressionAR OPENHOOK code CLOSEHOOK;
-while_stm: LOOPW OPENPARENTHESIS expressionLG CLOSEPARENTHESIS OPENHOOK code CLOSEHOOK;
+
+
+while_stm: C1 OPENHOOK code CLOSEHOOK{
+    strcpy( tab_quad[taille].op,"BR");
+    sprintf( tab_quad[taille].opr1,"%d", sauv_fin_while+1);
+    strcpy( tab_quad[taille].opr2,"");
+    strcpy( tab_quad[taille].res,"");
+    taille++;
+    sprintf(tab_quad[sauv_fin_while].opr1,"%d",taille+1);
+
+};
+C1:LOOPW OPENPARENTHESIS expressionLG CLOSEPARENTHESIS{
+    sauv_fin_while=taille-1;   
+};
+
+
+
 expression : expressionAR | expressionLG;
 read: READ OPENPARENTHESIS ID CLOSEPARENTHESIS SEMICOLON ;
 write: WRITE OPENPARENTHESIS expression CLOSEPARENTHESIS SEMICOLON;
@@ -265,12 +282,6 @@ int main(int argc, char **argv) {
     yyout = fopen("Output.txt", "r+");
     taille=0;
     int value = yyparse();
-
-    // Column *col = Table_sym->Columns;
-    // while(col!=NULL){
-    //     printf("%s  :   %s\n",col->nameToken,col->typeToken);
-    //     col=col->suivC;
-    // }
     int i =0;
     for(i=0 ; i<taille ; i++){
         printf("%d-(%s,%s,%s,%s)\n",i+1,tab_quad[i].op,tab_quad[i].opr1,tab_quad[i].opr2,tab_quad[i].res);
