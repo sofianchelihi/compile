@@ -4,6 +4,7 @@
     #include <stdlib.h>
     #include <string.h>
     #include "syntax.tab.h"
+   
 
     extern int currentColumn;
     int showsuccess = 1;

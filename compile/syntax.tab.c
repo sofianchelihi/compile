@@ -72,15 +72,17 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
+    #include "Struct.c"
     extern FILE *yyin;
 	extern FILE *yyout;
     extern int yylineno;
     extern char *yytext;
     extern int yylex();
     int currentColumn = 1;
+    Ligne *Table_sym;  
     int i =25;
 
-#line 84 "syntax.tab.c"
+#line 86 "syntax.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -555,15 +557,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    52,    52,    53,    53,    53,    53,    53,    53,    53,
-      53,    53,    53,    53,    53,    53,    53,    53,    53,    53,
-      53,    54,    54,    55,    55,    55,    56,    56,    56,    56,
-      56,    56,    57,    58,    59,    60,    60,    60,    61,    61,
-      61,    61,    62,    63,    64,    65,    66,    66,    67,    68,
-      69,    70,    70,    70,    70,    70,    70,    70,    70,    71,
-      71,    71,    71,    72,    73,    74,    74,    74,    74,    74,
-      75,    75,    75,    75,    75,    75,    75,    75,    75,    75,
-      75,    75,    76,    76
+       0,    54,    54,    55,    55,    55,    55,    55,    55,    55,
+      55,    55,    55,    55,    55,    55,    55,    55,    55,    55,
+      55,    56,    56,    57,    57,    57,    58,    58,    58,    58,
+      58,    58,    59,    60,    61,    62,    62,    62,    63,    63,
+      63,    63,    64,    65,    66,    67,    68,    68,    69,    70,
+      71,    72,    72,    72,    72,    72,    72,    72,    72,    73,
+      73,    73,    73,    74,    75,    76,    76,    76,    76,    76,
+      77,    77,    77,    77,    77,    77,    77,    77,    77,    77,
+      77,    77,    78,    78
 };
 #endif
 
@@ -1485,7 +1487,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1489 "syntax.tab.c"
+#line 1491 "syntax.tab.c"
 
       default: break;
     }
@@ -1717,19 +1719,24 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 77 "syntax.y"
+#line 79 "syntax.y"
 
 
 
 
 
 int main(int argc, char **argv) {
+    Table_sym = insertLigne(&Table_sym ,1);
+
+    insertColumn(Table_sym,"STRING","user","islam",1);
+
     yyin = fopen(argv[1], "r");
     int value = yyparse();
     printf("\n%d\n",value);
     if(value==1){
         printf("\nErreur dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
     }
+    printf("%s %s %s",Table_sym->Columns->typeToken,Table_sym->Columns->nameToken,Table_sym->Columns->valeurToken);
     fclose(yyin);
     return 0;
 }

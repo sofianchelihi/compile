@@ -3,12 +3,14 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
+    #include "Struct.c"
     extern FILE *yyin;
 	extern FILE *yyout;
     extern int yylineno;
     extern char *yytext;
     extern int yylex();
     int currentColumn = 1;
+    Ligne *Table_sym;  
     int i =25;
 %}
 
@@ -80,12 +82,17 @@ affectation : ID ASSIGNMENT expression | type ID ASSIGNMENT expression;
 
 
 int main(int argc, char **argv) {
+    Table_sym = insertLigne(&Table_sym ,1);
+
+    insertColumn(Table_sym,"STRING","user","islam",1);
+
     yyin = fopen(argv[1], "r");
     int value = yyparse();
     printf("\n%d\n",value);
     if(value==1){
         printf("\nErreur dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
     }
+    printf("%s %s %s",Table_sym->Columns->typeToken,Table_sym->Columns->nameToken,Table_sym->Columns->valeurToken);
     fclose(yyin);
     return 0;
 }
