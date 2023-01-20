@@ -26,6 +26,7 @@
         char opr2[10];
         char res[10];
     }quad;
+    int sauv_if_fin = 0;
 
     quad tab_quad[1000];
     int taille;
@@ -100,7 +101,9 @@ structure: ID ;
 tabledeclaration: type OPENBRACKET tablesize CLOSEBRACKET ID SEMICOLON;
 tablesize: ID | expressionAR | INTEGER;
 statements : if_stm | if_else_stm | for_stm | while_stm ;
-if_stm: IF OPENPARENTHESIS expressionLG CLOSEPARENTHESIS OPENHOOK code CLOSEHOOK;
+if_stm: IF OPENPARENTHESIS  expressionLG CLOSEPARENTHESIS OPENHOOK code CLOSEHOOK{
+        sprintf( tab_quad[sauv_if_fin].opr1,"%d",taille+1);
+    };
 if_else_stm: IF OPENPARENTHESIS expressionLG CLOSEPARENTHESIS OPENHOOK code CLOSEHOOK ELSE OPENHOOK code CLOSEHOOK;
 for_stm: LOOPF ID ASSIGNMENT expressionAR COMMA expressionLG COMMA expressionAR OPENHOOK code CLOSEHOOK;
 while_stm: LOOPW OPENPARENTHESIS expressionLG CLOSEPARENTHESIS OPENHOOK code CLOSEHOOK;
@@ -172,9 +175,50 @@ expressionAR :OPENPARENTHESIS expressionAR CLOSEPARENTHESIS { strcpy( $<string>$
 item: ID { strcpy($<string>$, $<string>1); }  | INTEGER { sprintf($<string>$,"%d",$<int_val>1); } ;
 tableelement : ID OPENBRACKET tablesize CLOSEBRACKET;
 champenreg: ID DOT ID ;
-expressionLG: OPENPARENTHESIS expressionLG CLOSEPARENTHESIS | expressionLG AND expressionLG | expressionLG OR expressionLG | NON expressionLG | element ;
-element : ID | BOOLEAN | tableelement | champenreg | expressionAR EQUAL expressionAR | expressionAR NONEQUAL expressionAR | expressionAR INFERIOR expressionAR | expressionAR INFERIOREQUAL expressionAR | expressionAR SUPERIOR expressionAR | expressionAR SUPERIOREQUAL expressionAR | expressionLG EQUAL expressionLG | expressionLG NONEQUAL expressionLG;
-// affectation : ID ASSIGNMENT expression | type ID ASSIGNMENT expression;
+expressionLG: OPENPARENTHESIS expressionLG CLOSEPARENTHESIS { strcpy( $<string>$,$<string>2);}  | expressionLG AND expressionLG | expressionLG OR expressionLG | NON expressionLG | element ;
+element : ID | BOOLEAN | tableelement | champenreg | expressionAR EQUAL expressionAR{
+    strcpy( tab_quad[taille].op,"BNE");
+    strcpy( tab_quad[taille].opr1,"");
+    strcpy( tab_quad[taille].opr2,$<string>1);
+    strcpy( tab_quad[taille].res,$<string>3);
+    sauv_if_fin = taille;
+    taille++;
+} | expressionAR NONEQUAL expressionAR {
+    strcpy( tab_quad[taille].op,"BE");
+    strcpy( tab_quad[taille].opr1,"");
+    strcpy( tab_quad[taille].opr2,$<string>1);
+    strcpy( tab_quad[taille].res,$<string>3);
+    sauv_if_fin = taille;
+    taille++;
+}| expressionAR INFERIOR expressionAR{
+     strcpy( tab_quad[taille].op,"BGE");
+    strcpy( tab_quad[taille].opr1,"");
+    strcpy( tab_quad[taille].opr2,$<string>1);
+    strcpy( tab_quad[taille].res,$<string>3);
+    sauv_if_fin = taille;
+    taille++;
+} | expressionAR INFERIOREQUAL expressionAR {
+    strcpy( tab_quad[taille].op,"BG");
+    strcpy( tab_quad[taille].opr1,"");
+    strcpy( tab_quad[taille].opr2,$<string>1);
+    strcpy( tab_quad[taille].res,$<string>3);
+    sauv_if_fin = taille;
+    taille++;
+} | expressionAR SUPERIOR expressionAR{
+     strcpy( tab_quad[taille].op,"BLE");
+    strcpy( tab_quad[taille].opr1,"");
+    strcpy( tab_quad[taille].opr2,$<string>1);
+    strcpy( tab_quad[taille].res,$<string>3);
+    sauv_if_fin = taille;
+    taille++;
+} | expressionAR SUPERIOREQUAL expressionAR {
+     strcpy( tab_quad[taille].op,"BL");
+    strcpy( tab_quad[taille].opr1,"");
+    strcpy( tab_quad[taille].opr2,$<string>1);
+    strcpy( tab_quad[taille].res,$<string>3);
+    sauv_if_fin = taille;
+    taille++;
+};
 affectation : ID ASSIGNMENT expressionAR SEMICOLON{ 
     if(get_id(Table_sym,$1)!=NULL){
         strcpy( tab_quad[taille].op,":=");
