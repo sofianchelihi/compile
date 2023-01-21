@@ -1,10 +1,28 @@
 pro : Nom_du_programme { 
-    int i;
-    for i <- 0 ; 5<10 ; 3{
-        int y<-4;
-        y<-2;
+    int k<-0;
+    struc y{
+        int y ;
+        int x;
     }
+    #ceci est un commentaire &&
 
-    int z<-3;
-    
+    int h<- 5+2*6;
+    string o ;
+    bool j;
+    if h>0 {
+        write(h+2);
+        read(k);
+    }
+    if(k<80){
+        for k<-10 ; k<= 20 ; 2{
+            write(k);
+        }
+    }else{
+        float f;
+        while( 4<>h){
+            write(h);
+            h<-h+1;
+        }
+        
+    }   
 } 

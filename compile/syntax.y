@@ -4,12 +4,6 @@
     #include <stdlib.h>
     #include <string.h>
     #include "Struct.c"
-    // #define YYSTYPE union {
-    //         char* string;
-    //         int int_val;
-    //         double real_val;
-    //         char char_val;
-    // }
     extern FILE *yyin;
 	extern FILE *yyout;
     extern int yylineno;
@@ -21,7 +15,7 @@
     int i =25;
     int ri=1;
     typedef struct quad{
-        char op[4];
+        char op[10];
         char opr1[10];
         char opr2[10];
         char res[10];
@@ -92,7 +86,7 @@
 %%
 /*  La grammaire */
 Input: | PRO ID OPENHOOK code CLOSEHOOK ;
-code: code code | affectation | commentaire  | tabledeclaration   | declaration | statements  | expression  | read | write  ;
+code: code code | affectation | commentaire  | tabledeclaration | structdeclaration   | declaration | statements  | expression  | read | write  ;
 declaration: type ID SEMICOLON { 
     if(get_id(Table_sym,$2)!=NULL){
         printf("Variable deja declarer : %s \n ",$2);
@@ -102,7 +96,8 @@ declaration: type ID SEMICOLON {
     }
     };
 type: INTEGERDECLARE  | REALDECLARE  | CHARDECLARE  | STRINGDECLARE  | BOOLEENDECLARE | structure ;
-// structdeclaration: STRUCTDECLARE structure OPENHOOK declarations CLOSEHOOK ;
+structdeclaration: STRUCTDECLARE structure OPENHOOK declarations CLOSEHOOK ;
+declarations : declaration | declaration declarations;
 structure: ID ;
 tabledeclaration: type OPENBRACKET tablesize CLOSEBRACKET ID SEMICOLON;
 tablesize: ID | expressionAR | INTEGER;
@@ -128,7 +123,6 @@ A1: A2 OPENHOOK code CLOSEHOOK {
 A2: IF OPENPARENTHESIS expressionLG CLOSEPARENTHESIS {
     sauv_else=taille-1;
 };
-//for_stm: LOOPF ID ASSIGNMENT expressionAR SEMICOLON expressionLG SEMICOLON INTEGER OPENHOOK code CLOSEHOOK { printf("here");};
 for_stm: R1 OPENHOOK code CLOSEHOOK{
     char res[10];
     strcpy( tab_quad[taille].op,"+");
@@ -187,9 +181,26 @@ C1:LOOPW OPENPARENTHESIS expressionLG CLOSEPARENTHESIS{
 
 
 expression : expressionAR | expressionLG;
-read: READ OPENPARENTHESIS ID CLOSEPARENTHESIS SEMICOLON;
-write: WRITE OPENPARENTHESIS expression CLOSEPARENTHESIS SEMICOLON;
-commentaire: INLINECOMMENT STRING;
+read: READ OPENPARENTHESIS ID CLOSEPARENTHESIS SEMICOLON{
+    if(get_id(Table_sym,$<string>3)!=NULL){
+        strcpy( tab_quad[taille].op,"INPUT");
+        strcpy( tab_quad[taille].opr1,$<string>3);
+        strcpy( tab_quad[taille].opr2,"");
+        strcpy( tab_quad[taille].res,"");
+        taille++;
+    }else{
+        printf("variable non declaré : %s\n",$<string>3);
+        YYERROR;
+    }
+};
+write: WRITE OPENPARENTHESIS expressionAR CLOSEPARENTHESIS SEMICOLON{
+    strcpy( tab_quad[taille].op,"OUTPUT");
+    strcpy( tab_quad[taille].opr1,$<string>3);
+    strcpy( tab_quad[taille].opr2,"");
+    strcpy( tab_quad[taille].res,"");
+    taille++;
+};
+commentaire: INLINECOMMENT ;
 expressionAR :OPENPARENTHESIS expressionAR CLOSEPARENTHESIS { strcpy( $<string>$,$<string>2); } | expressionAR ADD expressionAR {
     char res[10];
     strcpy( tab_quad[taille].op,"+");
@@ -335,12 +346,12 @@ int main(int argc, char **argv) {
     int value = yyparse();
     int i =0;
     for(i=0 ; i<taille ; i++){
-        printf("%d-(%s,%s,%s,%s)\n",i+1,tab_quad[i].op,tab_quad[i].opr1,tab_quad[i].opr2,tab_quad[i].res);
+        fprintf(yyout,"%d-(%s,%s,%s,%s)\n",i+1,tab_quad[i].op,tab_quad[i].opr1,tab_quad[i].opr2,tab_quad[i].res);
     }
 
 
     if(value==1){
-        printf("\nErreur dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
+        printf("\nErreur syntaxique dans la ligne :%d  et la colonne : %d\n",yylineno,currentColumn);
     }else{
         printf("Complation success\n");
     }
