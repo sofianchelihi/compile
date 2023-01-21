@@ -30,8 +30,11 @@
     int sauv_else =0;
     int sauv_else_fin=0;
     int sauv_fin_while=0;
+    int  sauv_for_test=0;
+    int sauv_for_init_id=0;
     quad tab_quad[1000];
     int taille;
+    char pas[20];
 %}
 
 %union {
@@ -46,7 +49,8 @@
 %token  LOOPF LOOPW
 %token  READ WRITE
 %token  IF ELSE
-%token  DOT COMMA
+%token  DOT
+%token <char_val> COMMA
 %token  <char_val> SEMICOLON
 %token  OPENPARENTHESIS CLOSEPARENTHESIS OPENHOOK CLOSEHOOK OPENBRACKET CLOSEBRACKET
 %token  EQUAL NONEQUAL AND OR NON INFERIOR SUPERIOR INFERIOREQUAL SUPERIOREQUAL
@@ -124,7 +128,47 @@ A1: A2 OPENHOOK code CLOSEHOOK {
 A2: IF OPENPARENTHESIS expressionLG CLOSEPARENTHESIS {
     sauv_else=taille-1;
 };
-for_stm: LOOPF ID ASSIGNMENT expressionAR COMMA expressionLG COMMA expressionAR OPENHOOK code CLOSEHOOK;
+//for_stm: LOOPF ID ASSIGNMENT expressionAR SEMICOLON expressionLG SEMICOLON INTEGER OPENHOOK code CLOSEHOOK { printf("here");};
+for_stm: R1 OPENHOOK code CLOSEHOOK{
+    char res[10];
+    strcpy( tab_quad[taille].op,"+");
+    strcpy( tab_quad[taille].opr1,tab_quad[sauv_for_init_id].res);
+    strcpy( tab_quad[taille].opr2,pas);
+    sprintf(res, "R%d", ri);
+    strcpy( tab_quad[taille].res,res);
+    taille++;
+    ri++;
+    strcpy( tab_quad[taille].op,":=");
+    sprintf(tab_quad[taille].opr1,"%s",res);
+    strcpy( tab_quad[taille].opr2,"");
+    strcpy( tab_quad[taille].res,tab_quad[sauv_for_init_id].res);
+    taille++;
+    strcpy( tab_quad[taille].op,"BR");
+    sprintf( tab_quad[taille].opr1,"%d", sauv_for_test);
+    strcpy( tab_quad[taille].opr2,"");
+    strcpy( tab_quad[taille].res,"");
+    taille++;
+    sprintf(tab_quad[sauv_for_test].opr1,"%d",taille+1);
+};
+R1:R2 SEMICOLON INTEGER{
+    sprintf(pas,"%d",$<int_val>3);
+};
+R2:R3 SEMICOLON expressionLG{
+    sauv_for_test = taille-1;
+};
+R3:LOOPF ID ASSIGNMENT expressionAR{
+    if(get_id(Table_sym,$<string>2)!=NULL){
+        strcpy( tab_quad[taille].op,":=");
+        strcpy(tab_quad[taille].opr1,$<string>4);
+        strcpy( tab_quad[taille].opr2,"");
+        strcpy( tab_quad[taille].res,$<string>2);
+        sauv_for_init_id =taille;
+        taille++;
+    }else{
+        printf("variable non declaré : %s\n",$<string>2);
+        YYERROR;
+    }
+};
 
 
 while_stm: C1 OPENHOOK code CLOSEHOOK{
@@ -143,7 +187,7 @@ C1:LOOPW OPENPARENTHESIS expressionLG CLOSEPARENTHESIS{
 
 
 expression : expressionAR | expressionLG;
-read: READ OPENPARENTHESIS ID CLOSEPARENTHESIS SEMICOLON ;
+read: READ OPENPARENTHESIS ID CLOSEPARENTHESIS SEMICOLON;
 write: WRITE OPENPARENTHESIS expression CLOSEPARENTHESIS SEMICOLON;
 commentaire: INLINECOMMENT STRING;
 expressionAR :OPENPARENTHESIS expressionAR CLOSEPARENTHESIS { strcpy( $<string>$,$<string>2); } | expressionAR ADD expressionAR {
@@ -207,7 +251,14 @@ expressionAR :OPENPARENTHESIS expressionAR CLOSEPARENTHESIS { strcpy( $<string>$
     ri++;
     strcpy( $<string>$,res);
 }| item;
-item: ID { strcpy($<string>$, $<string>1); }  | INTEGER { sprintf($<string>$,"%d",$<int_val>1); } ;
+item: ID { 
+    if(get_id(Table_sym,$<string>1)!=NULL){
+    strcpy($<string>$, $<string>1); 
+    }else{
+        printf("variable non declarer : %s\n",$<string>1);
+        YYERROR;
+    }
+        }  | INTEGER { sprintf($<string>$,"%d",$<int_val>1); } ;
 tableelement : ID OPENBRACKET tablesize CLOSEBRACKET;
 champenreg: ID DOT ID ;
 expressionLG: OPENPARENTHESIS expressionLG CLOSEPARENTHESIS { strcpy( $<string>$,$<string>2);}  | expressionLG AND expressionLG | expressionLG OR expressionLG | NON expressionLG | element ;

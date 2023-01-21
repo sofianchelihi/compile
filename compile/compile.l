@@ -151,6 +151,7 @@ INLINECOMMENT #{ANYTHING}
 {COMMA} {
     yysuccess("virgule", yytext, yyleng);
     currentColumn +=yyleng;
+    yylval.char_val=',';
     return(COMMA);
 }
 

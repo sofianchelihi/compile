@@ -1,8 +1,8 @@
 pro : Nom_du_programme { 
-    while ( 7> 8)
-    {
-        int  y <- 4;
-        y<-8;
+    int i;
+    for i <- 0 ; 5<10 ; 3{
+        int y<-4;
+        y<-2;
     }
 
     int z<-3;
